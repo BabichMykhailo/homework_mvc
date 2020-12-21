@@ -7,7 +7,19 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class CategoryRepository
+    public interface ICategoryRepository
+    {
+        void Create(Category model);
+
+        void DeleteById(int id);
+
+        Category GetById(int id);
+        void Edit(Category editedCategory);
+
+        IEnumerable<Category> GetMyCategories();
+    }
+
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly WebApplication_A_LEVELContext _ctx;
 
@@ -27,6 +39,21 @@ namespace DAL.Repositories
         {
             var entity = _ctx.Categories.FirstOrDefault(x => x.Id == id);
             _ctx.Categories.Remove(entity);
+
+            _ctx.SaveChanges();
+        }
+
+        public Category GetById(int id)
+        {
+            return _ctx.Categories.FirstOrDefault(x => x.Id == id);
+        }
+
+        public void Edit(Category editedCategory)
+        {
+            var category = GetById(editedCategory.Id);
+
+            category.Title = editedCategory.Title;
+            category.UpdatedDate = DateTime.Now;
 
             _ctx.SaveChanges();
         }

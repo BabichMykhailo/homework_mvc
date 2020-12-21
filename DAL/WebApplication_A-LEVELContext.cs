@@ -8,14 +8,21 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-        public class WebApplication_A_LEVELContext : DbContext
+    public class WebApplication_A_LEVELContext : DbContext
+    {
+        public WebApplication_A_LEVELContext() : base("name = DefaultConnection")
         {
-            public WebApplication_A_LEVELContext() : base("name = DefaultConnection")
-            {
-                
-            }
-
-            public DbSet<Category> Categories { get; set; }
-            public DbSet<Transaction> Transactions { get; set; }
+            Database.SetInitializer<WebApplication_A_LEVELContext>(new WebApplication_A_LEVELInitializer());
         }
+
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+
+        }
+    }
 }
